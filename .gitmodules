@@ -1,3 +1,6 @@
 [submodule "WhiteSur-icon-theme"]
 	path = WhiteSur-icon-theme
 	url = git@github.com:Suhoiyis/WhiteSur-icon-theme.git
+[submodule "WhiteSur-gtk-theme"]
+	path = WhiteSur-gtk-theme
+	url = git@github.com:Suhoiyis/WhiteSur-gtk-theme.git
