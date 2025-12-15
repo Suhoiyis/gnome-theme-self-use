@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# new
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    # Try to get from systemd user session (most reliable on Ubuntu/GNOME)
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus"
+fi
+
+# A simple script to display wifi name
+# 'ssid -i' = with icon, 'ssid' = text only
+# Cheers!
+# Addy
+
+# SSID_NAME=$(/sbin/iwgetid -r)
+
+# Try NetworkManager first (modern systems)
+SSID_NAME=$(nmcli -t -f active,ssid dev wifi 2>/dev/null | awk -F: '/^yes:/ {print $2; exit}')
+
+# Fallback to iwgetid if NM not used or failed
+if [[ -z "$SSID_NAME" ]]; then
+    SSID_NAME=$(/sbin/iwgetid -r 2>/dev/null)
+fi
+
+
+if [[ "${SSID_NAME}" != "" ]]; then
+	if  [[ $1 = "-i" ]]; then
+    echo "  ${SSID_NAME}"
+	else
+    echo "${SSID_NAME}"
+	fi
+else
+	echo "Not Connected"
+fi
+
+exit 0
