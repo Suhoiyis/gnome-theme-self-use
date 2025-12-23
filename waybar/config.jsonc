@@ -56,7 +56,7 @@
     "return-type": "json",
     "on-click": "missioncenter",
 
-    "on-click-middle": "kitty nvtop",
+    "on-click-middle": "kitty --class float_term -e nvtop",
     "on-scroll-up": "sniffnet",
     "on-scroll-down": "kitty --class float_term --title 'Bandwhich Net' -e sudo bandwhich",
 
