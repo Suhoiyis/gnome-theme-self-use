@@ -1,3 +1,9 @@
+waybar是面板、任务栏
+mako是通知服务
+
+
+---
+
 > `Mimosa-Light`这个是桌面小组件，源于 https://www.pling.com/p/1982387 ，经过了自己的多项改动。源码网站失效。
 > 
 > `Particle-sidebar-grub-theme_self/Particle-sidebar-grub-themes`是grub开机引导优化，源于 https://www.pling.com/p/2269763 / https://www.pling.com/p/2272739 （忘了到底哪个了）参考github仓库： https://github.com/yeyushengfan258/Particle-grub-theme / https://github.com/yeyushengfan258/Particle-circle-grub-theme
