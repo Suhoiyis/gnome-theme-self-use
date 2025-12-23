@@ -52,7 +52,7 @@
 
   "custom/sysmon": {
     "exec": "~/.config/waybar/scripts/sysmon.sh",
-    "interval": 2,
+    "interval": 1,
     "return-type": "json",
     "on-click": "missioncenter",
     "on-click-right": "gnome-system-monitor",
