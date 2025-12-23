@@ -1,0 +1,13 @@
+output "DP-7"{
+    mode "2560x1440@180.000"
+    scale 1
+    position x=0 y=0
+    focus-at-startup
+    variable-refresh-rate
+}
+
+output "eDP-1"{
+    mode "3072x1920@120.002"
+    scale 1
+    position x=2560 y=0
+}
