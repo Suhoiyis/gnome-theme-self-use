@@ -8,6 +8,7 @@
   "modules-left": [
     "niri/workspaces",
     "custom/right_div#5",
+    "custom/weather",
     "niri/window",
     "custom/right_div#6",
   ],
@@ -51,7 +52,7 @@
 
   "custom/sysmon": {
     "exec": "~/.config/waybar/scripts/sysmon.sh",
-    "interval": 3,
+    "interval": 2,
     "return-type": "json",
     "on-click": "missioncenter",
     "on-click-right": "gnome-system-monitor",
@@ -67,5 +68,14 @@
     "on-click": "playerctl play-pause",
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous",
+  },
+
+  "custom/weather": {
+    "exec": "python3 ~/.config/waybar/scripts/weather.py",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "interval": 3600, // 建议设置 600秒 (10分钟) 更新一次，太快会被 wttr.in 封 IP
+    "on-click": "~/.config/waybar/scripts/weather.py open", // 点击时在浏览器打开详细天气
   },
 }

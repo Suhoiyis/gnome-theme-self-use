@@ -499,3 +499,11 @@ window#waybar.empty #window {
     margin: 0;
     background: transparent;
 }
+
+#custom-weather {
+    background-color: @surface_container_high; /* 使用你喜欢的主题色 */
+    color: @primary;
+    padding: 0 10px;
+    border-radius: 0px; /* 如果需要圆角可以改这里 */
+    font-size: 16.6px;
+}
