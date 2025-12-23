@@ -53,13 +53,13 @@ if [ -n "$amd_path" ]; then
             # 使用 awk 转为 GB (除以 1024^3)
             vram_used_gb=$(awk "BEGIN {printf \"%.1f\", $vram_used_bytes / 1024 / 1024 / 1024}")
             vram_total_gb=$(awk "BEGIN {printf \"%.1f\", $vram_total_bytes / 1024 / 1024 / 1024}")
-            vram_str="VRAM:${vram_used_gb}G/${vram_total_gb}G"
+            vram_str="显存:${vram_used_gb}G/${vram_total_gb}G"
         else
             vram_str=""
         fi
 
         # C. 拼接 Tooltip (核心负载 + 显存)
-        gpu_tooltip_line="\n󰢮 7900 GRE ${vram_str}"
+        gpu_tooltip_line="\n󰢮 7900 ${vram_str}"
     fi
 else
     # 没找到 AMD 显卡，彻底隐藏

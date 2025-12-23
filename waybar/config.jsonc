@@ -55,6 +55,11 @@
     "interval": 1,
     "return-type": "json",
     "on-click": "missioncenter",
+
+    "on-click-middle": "kitty nvtop",
+    "on-scroll-up": "sniffnet",
+    "on-scroll-down": "kitty --class float_term --title 'Bandwhich Net' -e sudo bandwhich",
+
     "on-click-right": "gnome-system-monitor",
   },
 
