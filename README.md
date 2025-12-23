@@ -1,5 +1,6 @@
-waybar是面板、任务栏
-mako是通知服务
+waybar是面板、任务栏  
+mako是通知服务  
+niri是我们的wayland桌面
 
 
 ---
