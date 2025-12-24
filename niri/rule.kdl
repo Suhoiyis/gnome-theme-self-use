@@ -65,6 +65,13 @@ window-rule {
     match title="重命名"
     match app-id="btrfs-assistant"
     match app-id="markpix"
+    
+    match app-id="stacer"
+    match app-id="org.gnome.tweaks"
+    match app-id="nwg-look"
+    match app-id="org.gnome.Calculator"
+    match app-id="org.gnome.SystemMonitor"
+
     open-floating true
 }
 // waydroid调整
