@@ -81,6 +81,7 @@
     "format": "{}",
     "tooltip": true,
     "interval": 3600, // 建议设置 600秒 (10分钟) 更新一次，太快会被 wttr.in 封 IP
-    "on-click": "~/.config/waybar/scripts/weather.py open", // 点击时在浏览器打开详细天气
+
+    "on-click": "xdg-open 'https://wttr.in/Chenghua,Chengdu'",
   },
 }

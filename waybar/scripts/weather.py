@@ -1,137 +1,163 @@
 #!/usr/bin/env python3
 import json
 import sys
-import urllib.parse
-import urllib.request
-import webbrowser
+from datetime import datetime
+
+import requests
 
 # ================= 配置区域 =================
-API_KEY = "916e8ab926a8a3b8f9929bf03965e7db"
-CITY = "Chengdu"
-LANG = "zh_cn"
+LOCATION = "成华，成都"
 # ===========================================
 
-
-def get_icon(icon_code):
-    icon_map = {
-        "01d": "",
-        "01n": "",
-        "02d": "",
-        "02n": "",
-        "03d": "",
-        "03n": "",
-        "04d": "",
-        "04n": "",
-        "09d": "",
-        "09n": "",
-        "10d": "",
-        "10n": "",
-        "11d": "",
-        "11n": "",
-        "13d": "",
-        "13n": "",
-        "50d": "",
-        "50n": "",
-    }
-    return icon_map.get(icon_code, "")
-
-
-def get_wind_direction(deg):
-    directions = [
-        "北风",
-        "北偏东",
-        "东北风",
-        "东偏北",
-        "东风",
-        "东偏南",
-        "东南风",
-        "南偏东",
-        "南风",
-        "南偏西",
-        "西南风",
-        "西偏南",
-        "西风",
-        "西偏北",
-        "西北风",
-        "北偏西",
-    ]
-    idx = round(deg / 22.5) % 16
-    return directions[idx]
-
-
-def fetch_weather():
-    if API_KEY == "你的_API_KEY_粘贴在这里":
-        raise Exception("请填写 API Key")
-
-    # 构造请求 URL
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}&units=metric&lang={LANG}"
-
-    # 发送请求
-    # 使用 ProxyHandler({}) 强制不走代理，确保速度和定位准确（如果用自动定位的话）
-    proxy_handler = urllib.request.ProxyHandler({})
-    opener = urllib.request.build_opener(proxy_handler)
-
-    with opener.open(url) as response:
-        return json.loads(response.read().decode())
+WEATHER_CODES = {
+    "113": "☀️ ",
+    "116": "⛅ ",
+    "119": "☁️ ",
+    "122": "☁️ ",
+    "143": "🌫 ",
+    "176": "🌦 ",
+    "179": "🌧 ",
+    "182": "🌧 ",
+    "185": "🌧 ",
+    "200": "⛈ ",
+    "227": "🌨 ",
+    "230": "❄️ ",
+    "248": "🌫 ",
+    "260": "🌫 ",
+    "263": "🌦 ",
+    "266": "🌦 ",
+    "281": "🌧 ",
+    "284": "🌧 ",
+    "293": " ",
+    "296": "🌧 ",
+    "299": "🌧 ",
+    "302": "🌧 ",
+    "305": "🌧 ",
+    "308": "🌧 ",
+    "311": "🌧 ",
+    "314": "🌧 ",
+    "317": "🌧 ",
+    "320": "🌨 ",
+    "323": "🌨 ",
+    "326": "🌨 ",
+    "329": "❄️ ",
+    "332": "❄️ ",
+    "335": "❄️ ",
+    "338": "❄️ ",
+    "350": "🌧 ",
+    "353": "🌦 ",
+    "356": "🌧 ",
+    "359": "🌧 ",
+    "362": "🌧 ",
+    "365": "🌧 ",
+    "368": "🌨 ",
+    "371": "🌨 ",
+    "374": "🌧 ",
+    "377": "🌧 ",
+    "386": "⛈ ",
+    "389": "⛈ ",
+    "392": "⛈ ",
+    "395": "❄️ ",
+}
 
 
-def main():
-    try:
-        # 1. 如果命令行参数包含 "open"，则执行打开网页操作
-        if len(sys.argv) > 1 and sys.argv[1] == "open":
-            # 我们先请求一次数据以获取准确的 City ID
-            # 这样能确保跳转到准确的城市页面 (比如 Chengdu, CN 而不是 Chengdu, US)
-            try:
-                data = fetch_weather()
-                city_id = data["id"]
-                target_url = f"https://openweathermap.org/city/{city_id}"
-            except:
-                # 如果获取失败（比如没网），则回退到搜索页面
-                target_url = f"https://openweathermap.org/find?q={CITY}"
+def parse_time(time_str):
+    # 将 "300" 转为 "03:00", "0" 转为 "00:00"
+    return time_str.zfill(4)[:2] + ":00"
 
-            webbrowser.open(target_url)
-            sys.exit(0)
 
-        # 2. 正常模式：获取数据并输出 JSON
-        data = fetch_weather()
+try:
+    # 获取数据
+    url = f"https://wttr.in/{LOCATION}?format=j1"
+    res = requests.get(url)
+    data = res.json()
 
-        # 解析数据
-        temp = round(data["main"]["temp"])
-        feels_like = round(data["main"]["feels_like"])
-        humidity = data["main"]["humidity"]
-        description = data["weather"][0]["description"]
-        icon_code = data["weather"][0]["icon"]
-        city_name = data["name"]
-        country = data["sys"]["country"]
-        wind_speed_kmh = round(data["wind"]["speed"] * 3.6, 1)
-        wind_dir_str = get_wind_direction(data.get("wind", {}).get("deg", 0))
-        icon = get_icon(icon_code)
+    # --- 1. 状态栏显示 (Bar) ---
+    current = data["current_condition"][0]
+    temp_C = current["temp_C"]
+    weather_code = current["weatherCode"]
+    icon = WEATHER_CODES.get(weather_code, "Unknown")
+    text = f"{icon}{temp_C}°C"
 
-        # 构造 Tooltip
-        tooltip = (
-            f"<b>{city_name}, {country}</b>\n"
-            f"----------------\n"
-            f"描述: {description}\n"
-            f"体感: {feels_like}°C\n"
-            f"湿度: {humidity}%\n"
-            f"风向: {wind_dir_str} ({wind_speed_kmh}km/h)"
+    # --- 2. 悬浮窗显示 (Tooltip) ---
+    tooltip_lines = []
+
+    # 标题：地点 + 体感
+    area = data["nearest_area"][0]["areaName"][0]["value"]
+    feels_like = current["FeelsLikeC"]
+    tooltip_lines.append(f"<b>📍 {area}</b> (Feels {feels_like}°)\n")
+
+    # === 核心逻辑：跨天预测 ===
+    tooltip_lines.append("<b>🕐 未来趋势 :</b>")
+
+    # 获取当前小时 (0-23)
+    current_hour = datetime.now().hour
+
+    # 提取今天和明天的所有小时数据
+    today_hourly = data["weather"][0]["hourly"]
+    tomorrow_hourly = data["weather"][1]["hourly"]
+
+    # 将它们打平合并成一个大列表，并标记来源
+    # 格式: (小时数字, 数据对象, 是否是明天)
+    timeline = []
+
+    for h in today_hourly:
+        hour_int = int(h["time"]) // 100
+        timeline.append((hour_int, h, False))  # False = 今天
+
+    for h in tomorrow_hourly:
+        hour_int = int(h["time"]) // 100
+        timeline.append((hour_int, h, True))  # True = 明天
+
+    # 寻找未来 3 个节点
+    future_slots = []
+    found_count = 0
+
+    for hour_int, weather_obj, is_tomorrow in timeline:
+        # 如果已经找够了3个，停止
+        if found_count >= 3:
+            break
+
+        # 逻辑：
+        # 1. 如果是明天的 slot，无条件加入 (因为肯定比今天现在晚)
+        # 2. 如果是今天的 slot，必须晚于当前时间
+        if is_tomorrow or (hour_int > current_hour):
+            future_slots.append((hour_int, weather_obj, is_tomorrow))
+            found_count += 1
+
+    # 渲染这 3 个数据
+    for hour_int, h, is_tomorrow in future_slots:
+        time_str = parse_time(h["time"])
+        temp = h["tempC"]
+        desc = h["weatherDesc"][0]["value"]
+        wind = h["windspeedKmph"]
+
+        # 如果是明天的时间，加上 (+1) 标记，或者特殊显示
+        day_label = "(+1)" if is_tomorrow else ""
+
+        # 格式化输出
+        # 例如: 21:00 | 18°C | Rain
+        tooltip_lines.append(f"<tt>{time_str} | {temp}°C | {desc}</tt>")
+
+    tooltip_lines.append("")  # 空行
+
+    # --- 3. 未来几天的概览 ---
+    tooltip_lines.append("<b>🗓️ 每日概览:</b>")
+    for i, day in enumerate(data["weather"]):
+        if i == 0:
+            continue
+        date_obj = datetime.strptime(day["date"], "%Y-%m-%d")
+        day_name = date_obj.strftime("%a")
+        maxtemp = day["maxtempC"]
+        mintemp = day["mintempC"]
+        desc = day["hourly"][4]["weatherDesc"][0]["value"]
+        tooltip_lines.append(f"<b>{day_name}</b>: {mintemp}°~{maxtemp}°C {desc}")
+
+    print(
+        json.dumps(
+            {"text": text, "tooltip": "\n".join(tooltip_lines), "class": "weather"}
         )
+    )
 
-        print(
-            json.dumps(
-                {"text": f"{icon} {temp}°C", "tooltip": tooltip, "class": "weather"}
-            )
-        )
-
-    except Exception as e:
-        # 仅在非打开模式下输出错误 JSON
-        if len(sys.argv) <= 1:
-            print(
-                json.dumps(
-                    {"text": " N/A", "tooltip": f"错误: {str(e)}", "class": "weather"}
-                )
-            )
-
-
-if __name__ == "__main__":
-    main()
+except Exception as e:
+    print(json.dumps({"text": "Err", "tooltip": str(e)}))
