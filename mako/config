@@ -1,7 +1,7 @@
 include=~/.config/mako/colors.conf
 
 # 左键点击：打开软件/跳转链接
-on-button-left=invoke-default-action
+on-button-left=exec ~/.config/mako/niri-focus.sh
 # 右键点击：关闭通知
 on-button-right=dismiss
 
