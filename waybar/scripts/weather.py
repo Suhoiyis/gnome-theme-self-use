@@ -6,10 +6,65 @@ from datetime import datetime
 import requests
 
 # ================= 配置区域 =================
-LOCATION = "成华，成都"
+# 建议填入拼音 "Qu,City" 或经纬度
+LOCATION = "成华,成都"
 # ===========================================
 
-WEATHER_CODES = {
+# --- 天气代码 -> 中文描述 映射表 ---
+# 这是一个基于 WMO 4677 标准的完整汉化表
+WMO_TRANSLATION = {
+    "113": "晴",
+    "116": "多云",
+    "119": "阴",
+    "122": "阴",
+    "143": "薄雾",
+    "176": "局部小雨",
+    "179": "小雪",
+    "182": "小雨夹雪",
+    "185": "冻雨",
+    "200": "雷阵雨",
+    "227": "吹雪",
+    "230": "暴风雪",
+    "248": "雾",
+    "260": "冻雾",
+    "263": "小雨",
+    "266": "小雨",
+    "281": "冻雨",
+    "284": "冻雨",
+    "293": "局部小雨",
+    "296": "小雨",
+    "299": "小雨",
+    "302": "中雨",
+    "305": "中雨",
+    "308": "大雨",
+    "311": "冻雨",
+    "314": "小雨",
+    "317": "小雨夹雪",
+    "320": "小雨夹雪",
+    "323": "小雪",
+    "326": "小雪",
+    "329": "中雪",
+    "332": "中雪",
+    "335": "大雪",
+    "338": "大雪",
+    "350": "冰雹",
+    "353": "小雨",
+    "356": "中雨",
+    "359": "大雨",
+    "362": "雨夹雪",
+    "365": "雨夹雪",
+    "368": "小雪",
+    "371": "中雪",
+    "374": "小冰雹",
+    "377": "冰雹",
+    "386": "雷阵雨",
+    "389": "雷暴",
+    "392": "雷雪",
+    "395": "大雪",
+}
+
+# --- 天气代码 -> 图标 映射表 ---
+WEATHER_ICONS = {
     "113": "☀️ ",
     "116": "⛅ ",
     "119": "☁️ ",
@@ -61,97 +116,107 @@ WEATHER_CODES = {
 }
 
 
+def get_desc(code):
+    """根据天气代码获取中文描述，如果没找到则返回未知"""
+    return WMO_TRANSLATION.get(code, "未知")
+
+
 def parse_time(time_str):
-    # 将 "300" 转为 "03:00", "0" 转为 "00:00"
     return time_str.zfill(4)[:2] + ":00"
 
 
 try:
-    # 获取数据
     url = f"https://wttr.in/{LOCATION}?format=j1"
-    res = requests.get(url)
+
+    # 伪装成 curl 或者 浏览器，防止被服务器重置连接
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
+    # 设置超时时间，防止 Waybar 卡死
+    res = requests.get(url, headers=headers, timeout=10)
+
     data = res.json()
 
     # --- 1. 状态栏显示 (Bar) ---
     current = data["current_condition"][0]
     temp_C = current["temp_C"]
-    weather_code = current["weatherCode"]
-    icon = WEATHER_CODES.get(weather_code, "Unknown")
+    code = current["weatherCode"]
+
+    icon = WEATHER_ICONS.get(code, "")
+    # 状态栏现在只显示 图标 + 温度 (保持简洁)
     text = f"{icon}{temp_C}°C"
 
     # --- 2. 悬浮窗显示 (Tooltip) ---
     tooltip_lines = []
 
-    # 标题：地点 + 体感
+    # 标题
     area = data["nearest_area"][0]["areaName"][0]["value"]
     feels_like = current["FeelsLikeC"]
-    tooltip_lines.append(f"<b>📍 {area}</b> (Feels {feels_like}°)\n")
+    current_desc = get_desc(code)
+    tooltip_lines.append(f"<b>📍 {area}</b>: {current_desc}")
 
-    # === 核心逻辑：跨天预测 ===
-    tooltip_lines.append("<b>🕐 未来趋势 :</b>")
+    # === 未来趋势 (Next 9 Hours) ===
+    tooltip_lines.append("<b>🕐 未来趋势:</b>")
 
-    # 获取当前小时 (0-23)
     current_hour = datetime.now().hour
-
-    # 提取今天和明天的所有小时数据
     today_hourly = data["weather"][0]["hourly"]
     tomorrow_hourly = data["weather"][1]["hourly"]
 
-    # 将它们打平合并成一个大列表，并标记来源
-    # 格式: (小时数字, 数据对象, 是否是明天)
     timeline = []
-
     for h in today_hourly:
-        hour_int = int(h["time"]) // 100
-        timeline.append((hour_int, h, False))  # False = 今天
-
+        timeline.append((int(h["time"]) // 100, h, False))
     for h in tomorrow_hourly:
-        hour_int = int(h["time"]) // 100
-        timeline.append((hour_int, h, True))  # True = 明天
+        timeline.append((int(h["time"]) // 100, h, True))
 
-    # 寻找未来 3 个节点
-    future_slots = []
-    found_count = 0
-
-    for hour_int, weather_obj, is_tomorrow in timeline:
-        # 如果已经找够了3个，停止
-        if found_count >= 3:
+    count = 0
+    for hour_int, h, is_tomorrow in timeline:
+        if count >= 3:
             break
 
-        # 逻辑：
-        # 1. 如果是明天的 slot，无条件加入 (因为肯定比今天现在晚)
-        # 2. 如果是今天的 slot，必须晚于当前时间
         if is_tomorrow or (hour_int > current_hour):
-            future_slots.append((hour_int, weather_obj, is_tomorrow))
-            found_count += 1
+            time_str = parse_time(h["time"])
+            temp = h["tempC"]
+            # 这里调用汉化函数
+            desc = get_desc(h["weatherCode"])
 
-    # 渲染这 3 个数据
-    for hour_int, h, is_tomorrow in future_slots:
-        time_str = parse_time(h["time"])
-        temp = h["tempC"]
-        desc = h["weatherDesc"][0]["value"]
-        wind = h["windspeedKmph"]
+            day_label = "(+1)" if is_tomorrow else ""
 
-        # 如果是明天的时间，加上 (+1) 标记，或者特殊显示
-        day_label = "(+1)" if is_tomorrow else ""
+            # 使用中文全角空格或者制表符对齐
+            tooltip_lines.append(f"<tt>{time_str} | {temp}°C | {desc}</tt>")
+            count += 1
 
-        # 格式化输出
-        # 例如: 21:00 | 18°C | Rain
-        tooltip_lines.append(f"<tt>{time_str} | {temp}°C | {desc}</tt>")
+    # tooltip_lines.append("")
 
-    tooltip_lines.append("")  # 空行
-
-    # --- 3. 未来几天的概览 ---
+    # === 每日概览 ===
     tooltip_lines.append("<b>🗓️ 每日概览:</b>")
+    # 中文星期映射
+    WEEK_MAP = {
+        "Mon": "周一",
+        "Tue": "周二",
+        "Wed": "周三",
+        "Thu": "周四",
+        "Fri": "周五",
+        "Sat": "周六",
+        "Sun": "周日",
+    }
+
     for i, day in enumerate(data["weather"]):
         if i == 0:
             continue
         date_obj = datetime.strptime(day["date"], "%Y-%m-%d")
-        day_name = date_obj.strftime("%a")
+
+        # 获取英文星期并转中文
+        en_day = date_obj.strftime("%a")
+        cn_day = WEEK_MAP.get(en_day, en_day)
+
         maxtemp = day["maxtempC"]
         mintemp = day["mintempC"]
-        desc = day["hourly"][4]["weatherDesc"][0]["value"]
-        tooltip_lines.append(f"<b>{day_name}</b>: {mintemp}°~{maxtemp}°C {desc}")
+
+        # 获取中午12点的天气代码进行汉化
+        noon_code = day["hourly"][4]["weatherCode"]
+        desc = get_desc(noon_code)
+
+        tooltip_lines.append(f"<b>{cn_day}</b>: {mintemp}~{maxtemp}°C {desc}")
 
     print(
         json.dumps(
