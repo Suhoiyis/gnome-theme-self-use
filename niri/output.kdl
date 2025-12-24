@@ -8,6 +8,6 @@ output "DP-7"{
 
 output "eDP-1"{
     mode "3072x1920@120.002"
-    scale 1
-    position x=2560 y=0
+    scale 1.5
+    position x=-2048 y=0
 }
