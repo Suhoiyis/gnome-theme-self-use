@@ -7,7 +7,7 @@ echo "开始设置主题: $(date)" > "$LOG_FILE"
 
 
 # 告诉 GTK 框架我们要用什么主题
-gsettings set org.gnome.desktop.interface gtk-theme 'MacTahoe-Light' 2>> "$LOG_FILE"
+gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3' 2>> "$LOG_FILE"
 gsettings set org.gnome.desktop.interface icon-theme 'Adwaita-Matugen-A' 2>> "$LOG_FILE"
 gsettings set org.gnome.desktop.interface cursor-theme 'MacTahoe' 2>> "$LOG_FILE"
 gsettings set org.gnome.desktop.interface cursor-size 24 2>> "$LOG_FILE"
