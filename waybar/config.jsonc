@@ -76,12 +76,15 @@
   },
 
   "custom/weather": {
-    "exec": "python3 ~/.config/waybar/scripts/weather.py",
-    "return-type": "json",
-    "format": "{}",
+    "format": "{}°",
     "tooltip": true,
-    "interval": 3600, // 建议设置 600秒 (10分钟) 更新一次，太快会被 wttr.in 封 IP
-
-    "on-click": "xdg-open 'https://wttr.in/Chenghua,Chengdu'",
+    "interval": 3600,
+    // 核心在这行：使用 wttrbar 命令
+    // --location: 指定你的位置 (比如 Beijing)
+    // --lang zh: 强制中文
+    // --nerd: 使用 Nerd Font 图标 (比 emoji 好看)
+    // --custom-indicator: 自定义显示格式 "{ICON} {temp_C}"
+    "exec": "wttrbar --location Chengdu --lang zh --nerd --custom-indicator '{ICON} {temp_C}'",
+    "return-type": "json",
   },
 }
