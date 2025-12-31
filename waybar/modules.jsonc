@@ -112,20 +112,20 @@
   "custom/screenshot": {
     "format": "",
     "tooltip-format": "Click to easy Screenshot Right Click to power screenshot or Middle Click to longshot",
-    "on-click":"~/.config/waybar/scripts/screenshot.sh",
+    "on-click": "~/.config/waybar/scripts/screenshot.sh",
     "on-click-right": "~/.config/waybar/scripts/power-screenshot.sh",
-    "on-click-middle":"~/.config/waybar/scripts/longshot-sh/longshot.sh"
+    "on-click-middle": "~/.config/waybar/scripts/longshot-sh/longshot.sh",
   },
-  
+
   //wf-recorder
   "custom/wfrec": {
-  "exec": "~/.config/waybar/scripts/wf-recorder.sh status-json",
-  "return-type": "json",
-  //"interval": 1,                 // 每秒刷新一次
-  "signal": 9,                   // 与脚本里的 WAYBAR_SIG 对应
-  "tooltip": true,
-  "on-click": "~/.config/waybar/scripts/wf-recorder.sh toggle",  // 左键：开始/停止
-  "on-click-right": "~/.config/waybar/scripts/wf-recorder.sh stop"
+    "exec": "~/.config/waybar/scripts/wf-recorder.sh status-json",
+    "return-type": "json",
+    //"interval": 1,                 // 每秒刷新一次
+    "signal": 9, // 与脚本里的 WAYBAR_SIG 对应
+    "tooltip": true,
+    "on-click": "~/.config/waybar/scripts/wf-recorder.sh toggle", // 左键：开始/停止
+    "on-click-right": "~/.config/waybar/scripts/wf-recorder.sh stop",
   },
 
   //声音模块
@@ -179,7 +179,7 @@
     "format": "󰣇",
     "on-click": "fuzzel",
     "on-click-right": "waypaper",
-    "on-click-middle":"~/.config/scripts/niri_auto_blur_bg.sh || pkill -f niri_auto_blur_bg.sh"
+    "on-click-middle": "~/.config/scripts/niri_auto_blur_bg.sh || pkill -f niri_auto_blur_bg.sh",
   },
   //电源菜单
   "group/powermenu": {
@@ -244,23 +244,22 @@
     "tooltip-format": "Ex.Monitor 100% brightness",
     "format": "󰃠",
     "on-click": "ddcutil --display 1 setvcp 10 100 ",
-    "on-scroll-up":"true",
-    "on-scroll-down":"true"
-
+    "on-scroll-up": "true",
+    "on-scroll-down": "true",
   },
   "custom/ddcutil-night": {
     "tooltip-format": "Ex.Monitor 65% brightness",
     "format": "󰃟",
     "on-click": "ddcutil --display 1 setvcp 10 65 ",
-    "on-scroll-up":"true",
-    "on-scroll-down":"true"
+    "on-scroll-up": "true",
+    "on-scroll-down": "true",
   },
   "custom/ddcutil-sleep": {
     "tooltip-format": "Ex.Monitor 5% brightness",
     "format": "󰃞",
     "on-click": "ddcutil --display 1 setvcp 10 5 ",
-    "on-scroll-up":"true",
-    "on-scroll-down":"true"
+    "on-scroll-up": "true",
+    "on-scroll-down": "true",
   },
   //swaync通知模块
   "custom/swaync": {
@@ -330,7 +329,7 @@
     },
     "exec-if": "which waybar-module-pacman-updates",
     "exec": "waybar-module-pacman-updates --no-zero-output",
-    "on-click": "kitty -e yay",
+    "on-click": "kitty -e paru",
   },
   //隐私
   "privacy": {
@@ -372,5 +371,4 @@
   "dwl/window": {
     "format": "[{layout}]{title}",
   },
-
 }

@@ -361,6 +361,7 @@ spawn-at-startup "swayosd-server"
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
+
 // 取消启动niri时自动开启快捷键教程
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
