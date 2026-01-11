@@ -84,19 +84,34 @@
     "on-click": "kitty -e nmtui",
     "on-click-right": "nm-connection-editor",
   },
+  // "bluetooth": {
+  //   //蓝牙关闭状态下的图标和鼠标悬浮时的提示
+  //   "format-disabled": "󰂲",
+  //   "tooltip-format-disabled": "Click to enable",
+  //   "format": "󰂯",
+  //   "tooltip-format-on": " 󰂯 Click to disable or Right click to open GUI",
+  //   //连接状态下的图标和提示
+  //   "format-connected": "󰂱",
+  //   "tooltip-format-connected": "󰂱 {device_alias}Richt click to open GUI",
+  //   //点击功能
+  //   "on-click": "~/.config/waybar/scripts/toggle-bluetooth.sh",
+  //   "on-click-right": "blueberry",
+  // },
+
   "bluetooth": {
-    //蓝牙关闭状态下的图标和鼠标悬浮时的提示
     "format-disabled": "󰂲",
     "tooltip-format-disabled": "Click to enable",
     "format": "󰂯",
-    "tooltip-format-on": " 󰂯 Click to disable or Right click to open GUI",
-    //连接状态下的图标和提示
+    "tooltip-format-on": "󰂯 Click to disable or Right click to open GUI",
     "format-connected": "󰂱",
-    "tooltip-format-connected": "󰂱 {device_alias}Richt click to open GUI",
-    //点击功能
+    // 1. 使用 {device_enumerate} 来显示所有已连接设备的列表
+    "tooltip-format-connected": "󰂱 已连接设备:\n{device_enumerate}",
+    // 2. 定义列表中每一行显示的内容（名称 + 电量）
+    "tooltip-format-enumerate-connected": "󰥉 {device_alias} : {device_battery_percentage}%",
     "on-click": "~/.config/waybar/scripts/toggle-bluetooth.sh",
     "on-click-right": "blueberry",
   },
+
   //左键循环切换性能模式
   "power-profiles-daemon": {
     "format": "{icon}",
