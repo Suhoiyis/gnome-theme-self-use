@@ -115,8 +115,10 @@
   //左键循环切换性能模式
   "power-profiles-daemon": {
     "format": "{icon}",
-    "tooltip-format": "Performance mode:{profile}",
-    "tooltip": true,
+
+    "tooltip": false,
+    // "tooltip-format": "Performance mode:{profile}",
+    // "tooltip": true,
     "format-icons": {
       "performance": "󱐋",
       "balanced": "",
@@ -190,7 +192,8 @@
   },
   //logo+程序启动器
   "custom/applauncher": {
-    "tooltip-format": "Click to Open Applauncher or Right-Click to Select Wallpaper or Middle-Click to toggle blur bg",
+    // "tooltip-format": "Click to Open Applauncher or Right-Click to Select Wallpaper or Middle-Click to toggle blur bg",
+    "tooltip": false,
     "format": "󰣇",
     "on-click": "fuzzel",
     "on-click-right": "waypaper",
@@ -328,6 +331,7 @@
     },
     "tooltip-format-activated": "idle Enabled",
     "tooltip-format-deactivated": "idle Disabled",
+    "tooltip": false,
   },
   //分隔符󰇝 󱋱
   "custom/separator#1": {
