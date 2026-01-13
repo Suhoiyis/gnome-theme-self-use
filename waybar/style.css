@@ -177,6 +177,7 @@ window#waybar.empty #window {
 
 #power-profiles-daemon,
 #custom-colorpicker,
+#custom-kbd_backlight,
 #idle_inhibitor {
     background-color: @tertiary;
     color: @on_tertiary;

@@ -22,6 +22,7 @@
     "custom/left_div#2",
     "idle_inhibitor",
     "custom/colorpicker",
+    "custom/kbd_backlight",
     "power-profiles-daemon",
     "custom/left_div#11",
     "custom/left_div#1",
@@ -84,7 +85,7 @@
     // --lang zh: 强制中文
     // --nerd: 使用 Nerd Font 图标 (比 emoji 好看)
     // --custom-indicator: 自定义显示格式 "{ICON} {temp_C}"
-    "exec": "wttrbar --location Chengdu --lang zh --nerd --custom-indicator '{ICON} {temp_C}'",
+    "exec": "wttrbar --location Hangzhou --lang zh --nerd --custom-indicator '{ICON} {temp_C}'",
     "return-type": "json",
   },
 }
