@@ -56,8 +56,21 @@
   "niri/window": {
     "format": "{}",
     "rewrite": {
-      "(.*) - Mozilla Firefox": "🌎 $1",
+      "(.*) — Mozilla Firefox": "󰈹 $1",
+      "(.*) - Google Chrome": " $1",
+      "(.*) - Visual Studio Code": " $1",
+      "(.*) - Thunar": " $1",
+      "(.*)Steam": "󰓓 Steam $1",
+
+      "^nvim\\s+(.*)$": " $1",
+      "^nvim$": " Neovim",
+
+      "^vim\\s+(.*)$": " $1",
+      "^vim$": " Vim",
+
+      // 终端优化
       "(.*) - zsh": "> [$1]",
+      "(.*) - kitty": "󰄛 $1",
     },
   },
   //网络和蓝牙
