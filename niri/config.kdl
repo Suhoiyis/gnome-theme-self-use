@@ -151,8 +151,8 @@ input {
     focus-follows-mouse max-scroll-amount="30%"
 }
 
-
 layout {
+
     // Set gaps around windows in logical pixels.
     // 窗口和窗口之间的间距
     gaps 12
@@ -390,3 +390,4 @@ window-rule {
     default-column-width { fixed 1000; }
     default-window-height { fixed 600; }
 }
+//include "./noctalia.kdl"
