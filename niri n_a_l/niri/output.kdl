@@ -1,0 +1,25 @@
+// niri msg outputs
+
+output "DP-1"{
+    mode "2560x1440@180.000"
+    scale 1
+    position x=2304 y=0
+    focus-at-startup
+    variable-refresh-rate
+}
+
+output "DP-7"{
+    mode "2560x1440@180.000"
+    scale 1
+    position x=2304 y=0
+    focus-at-startup
+    variable-refresh-rate
+}
+
+
+
+output "eDP-1"{
+    mode "3072x1920@120.002"
+    scale 1.3333333333333333
+    position x=0 y=0
+}
