@@ -321,13 +321,13 @@ background-color "transparent"
 // 询问管理员权限功能（身份验证）
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 // 桌面壁纸的守护进程
-spawn-at-startup "swww-daemon"
+//spawn-at-startup "swww-daemon"
 // 总览界面背景壁纸的守护进程
-spawn-sh-at-startup "swww-daemon -n overview"
+//spawn-sh-at-startup "swww-daemon -n overview"
 // 启动niri时ss随机更换一张壁纸
-spawn-at-startup "waypaper" "--random"
+//spawn-at-startup "waypaper" "--random"
 // 有聚焦窗口时桌面自动模糊的脚本
-spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
+//spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
 // 屏幕分享、录屏相关的环境设置
 spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & /usr/lib/xdg-desktop-portal-gnome"
 // 通知程序
@@ -352,13 +352,16 @@ spawn-at-startup "/home/yua/.config/niri/scripts/init-theme.sh"
 spawn-at-startup "/home/yua/.config/niri/scripts/fix-audio-levels.sh"
 
 //网络面板
-spawn-at-startup "nm-applet"
+//spawn-at-startup "nm-applet"
 
 //蓝牙,只在niri里用
 //spawn-at-startup "blueman-applet"
 
 //大写
 spawn-at-startup "swayosd-server"
+
+//壁纸
+spawn-at-startup "linux-wallpaperengine-gui" "--minimized"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
