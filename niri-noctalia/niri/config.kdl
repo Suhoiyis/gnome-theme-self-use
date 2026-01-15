@@ -5,7 +5,7 @@ include "output.kdl"
 include "noctalia.kdl"
 
 // 截图保存位置
-screenshot-path "~/Pictures/Screenshots/Niri-screenshots/%Y-%m-%d %H-%M-%S.png"
+screenshot-path "~/Pictures/Screenshots/Noctalia-screenshots/%Y-%m-%d %H-%M-%S.png"
 
 // 环境变量
 environment {
@@ -369,6 +369,8 @@ spawn-at-startup "qs" "-c" "noctalia-shell"
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
+// 修改这一行，将标准输出和错误都存入 log
+spawn-at-startup "sh" "-c" "/home/yua/.config/niri/scripts/sync_starship.sh > /tmp/starship_sync.log 2>&1"
 
 // 取消启动niri时自动开启快捷键教程
 hotkey-overlay {
@@ -413,3 +415,5 @@ debug {
   honor-xdg-activation-with-invalid-serial
 }
 
+
+include "./noctalia.kdl"

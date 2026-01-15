@@ -390,4 +390,14 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
     // moving the mouse or pressing any other key.
     Mod+Shift+P  hotkey-overlay-title="关闭显示器 Turn off monitors" { power-off-monitors; }
 
+
+// 截取全屏并使用 Noctalia 发送通知
+    Print {
+        spawn "sh" "-c" "niri msg action screenshot && qs -c noctalia-shell ipc call toast send '{\"title\": \"截图成功\", \"body\": \"已保存至图片目录\", \"icon\": \"camera-photo\"}'";
+    }
+
+    // 交互式选择区域截图
+    Alt+Print {
+        spawn "sh" "-c" "niri msg action screenshot-screen && qs -c noctalia-shell ipc call toast send '{\"title\": \"区域截图\", \"type\": \"notice\"}'";
+    }
 }
