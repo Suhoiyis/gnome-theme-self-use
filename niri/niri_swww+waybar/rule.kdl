@@ -50,7 +50,7 @@ window-rule {
     match app-id="steam" title="Friends List"
     match app-id="blueberry.py" title="蓝牙"
     match app-id="flameshot"
-    match app-id="com.github.hluk.copyq" 
+    match app-id="com.github.hluk.copyq"
     match app-id="be.alexandervanhee.gradia"
     match app-id="org.pulseaudio.pavucontrol" title="音量控制"
     match app-id="org.gnome.clocks" title="时钟"
@@ -65,7 +65,7 @@ window-rule {
     match title="重命名"
     match app-id="btrfs-assistant"
     match app-id="markpix"
-    
+
     match app-id="stacer"
     match app-id="org.gnome.tweaks"
     match app-id="nwg-look"
@@ -99,7 +99,7 @@ window-rule {
 window-rule {
     match app-id="mpv"
     match app-id="celluloid"
-    opacity 1.0 
+    opacity 1.0
 }
 
 
@@ -137,4 +137,13 @@ window-rule {
 
     // Use this instead if you want them visible on third-party screenshot tools.
     // block-out-from "screencast"
+}
+
+// Niri 环境切换应用窗口规则
+window-rule {
+    match app-id="com.niri.switcher"
+    open-floating true
+    // 设置默认浮动窗口大小
+    default-column-width { fixed 900; }
+    default-window-height { fixed 700; }
 }
