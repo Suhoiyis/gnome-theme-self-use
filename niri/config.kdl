@@ -153,8 +153,6 @@ input {
 
 layout {
 
-background-color "transparent"
-
     // Set gaps around windows in logical pixels.
     // 窗口和窗口之间的间距
     gaps 12
@@ -321,13 +319,13 @@ background-color "transparent"
 // 询问管理员权限功能（身份验证）
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 // 桌面壁纸的守护进程
-//spawn-at-startup "swww-daemon"
+spawn-at-startup "swww-daemon"
 // 总览界面背景壁纸的守护进程
-//spawn-sh-at-startup "swww-daemon -n overview"
+spawn-sh-at-startup "swww-daemon -n overview"
 // 启动niri时ss随机更换一张壁纸
-//spawn-at-startup "waypaper" "--random"
+spawn-at-startup "waypaper" "--random"
 // 有聚焦窗口时桌面自动模糊的脚本
-//spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
+spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
 // 屏幕分享、录屏相关的环境设置
 spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & /usr/lib/xdg-desktop-portal-gnome"
 // 通知程序
@@ -352,19 +350,13 @@ spawn-at-startup "/home/yua/.config/niri/scripts/init-theme.sh"
 spawn-at-startup "/home/yua/.config/niri/scripts/fix-audio-levels.sh"
 
 //网络面板
-//spawn-at-startup "nm-applet"
+spawn-at-startup "nm-applet"
 
 //蓝牙,只在niri里用
 //spawn-at-startup "blueman-applet"
 
 //大写
 spawn-at-startup "swayosd-server"
-
-//壁纸
-spawn-at-startup "/home/yua/AppImages/linuxwallpaperenginegui.appimage" "--minimized"
-// 使用完整的绝对路径，并加入循环重启机制
-// 修复核心：添加 -n 参数，并保留 -d 以应对 Electron 应用的文件替换逻辑
-spawn-sh-at-startup "while true; do echo $HOME/.config/linux-wallpaperengine-gui/config.json | entr -ndp /home/yua/.config/niri/scripts/sync_colors.sh; sleep 1; done"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -399,24 +391,3 @@ window-rule {
     default-window-height { fixed 600; }
 }
 //include "./noctalia.kdl"
-
-
-window-rule {
-  // Rounded corners for a modern look.
-  geometry-corner-radius 20
-
-  // Clips window contents to the rounded corner boundaries.
-  clip-to-geometry true
-}
-
-debug {
-  // Allows notification actions and window activation from Noctalia.
-  honor-xdg-activation-with-invalid-serial
-}
-
-// Optionally, disable the workspace shadows in the overview.
-overview {
-  workspace-shadow {
-    off
-  }
-}
