@@ -362,6 +362,9 @@ spawn-at-startup "swayosd-server"
 
 //壁纸
 spawn-at-startup "/home/yua/AppImages/linuxwallpaperenginegui.appimage" "--minimized"
+// 使用完整的绝对路径，并加入循环重启机制
+// 修复核心：添加 -n 参数，并保留 -d 以应对 Electron 应用的文件替换逻辑
+spawn-sh-at-startup "while true; do echo $HOME/.config/linux-wallpaperengine-gui/config.json | entr -ndp /home/yua/.config/niri/scripts/sync_colors.sh; sleep 1; done"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
