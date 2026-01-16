@@ -56,7 +56,7 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
 
     // 锁屏
 
-    Mod+Alt+L hotkey-overlay-title="锁屏 Lock screen" { spawn "swaylock"; }
+    //Mod+Alt+L hotkey-overlay-title="锁屏 Lock screen" { spawn "swaylock"; }
     Mod+P hotkey-overlay-title="选取屏幕颜色 Pick color " { spawn-sh "hyprpicker | wl-copy"; }
     Mod+Alt+V  hotkey-overlay-title="剪贴板 Clipboard" {spawn-sh "copyq toggle || clipse-gui";}
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
@@ -97,7 +97,7 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
     // super+方向键就是切换聚焦，再加上ctrl就是移动窗口
     // super+a/d 比较特殊，不是切换聚焦而是左右合并colume（相当于左右移动窗口）
     // super+shift就是跨显示器，加上ctrl就是移动窗口
-    
+
     // 切换聚焦
     // super+方向键
     Mod+Left  { focus-column-left; }
@@ -130,7 +130,7 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
     // mod+ctrl+S/W 上下切换窗口
     Mod+Ctrl+S  { move-window-down; }
     Mod+Ctrl+W    { move-window-up; }
-    
+
     // Alternative commands that move across workspaces when reaching
     // the first or last window in a column.
     // Mod+J     { focus-window-or-workspace-down; }
@@ -176,7 +176,7 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
     // ...
 
     // And you can also move a whole workspace to another monitor:
-    
+
     //移动整个工作区
     // mod+shift跨显示器，alt代表移动整个工作区，再加上三组方向键
     Mod+Shift+Alt+W  { move-workspace-to-monitor-up; }
@@ -193,7 +193,7 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
     Mod+Shift+Alt+Down  { move-workspace-to-monitor-down; }
     Mod+Shift+Alt+Right  { move-workspace-to-monitor-right; }
     Mod+Shift+Alt+Left  { move-workspace-to-monitor-left; }
-    
+
     // 上下切换工作区
     Mod+Page_Down      { focus-workspace-down; }
     Mod+Page_Up        { focus-workspace-up; }
@@ -278,7 +278,7 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
 
     // Switches focus between the current and the previous workspace.
     //Mod+Tab { focus-workspace-previous; }
-    
+
     // The following binds move the focused window in and out of a column.
     // If the window is alone, they will consume it into the nearby column to the side.
     // If the window is already in a column, they will expel it out.
@@ -302,7 +302,7 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
     // mod+鼠标侧键 上下切换聚焦
     Mod+MouseForward { focus-window-up; }
     Mod+MouseBack    { focus-window-down; }
-    
+
     // 按照预设切换窗口宽度
     Mod+R  hotkey-overlay-title="按预设切换宽度 Switch width " { switch-preset-column-width; }
     // Cycling through the presets in reverse order is also possible.
@@ -355,7 +355,7 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
-    
+
 
     // Actions to switch layouts.
     // Note: if you uncomment these, make sure you do NOT have

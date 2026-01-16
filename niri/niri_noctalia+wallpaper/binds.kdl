@@ -44,7 +44,7 @@ binds {
 // 将 spawn "fuzzel" 修改为下方的 IPC 调用命令
 
 
-// noctalia launcher
+    // noctalia launcher
 Mod+Z hotkey-overlay-title="程序菜单 Launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
 
 // noctalia setting
@@ -56,7 +56,7 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
 
     // 锁屏
 
-    Mod+Alt+L hotkey-overlay-title="锁屏 Lock screen" { spawn "swaylock"; }
+    //Mod+Alt+L hotkey-overlay-title="锁屏 Lock screen" { spawn "swaylock"; }
     Mod+P hotkey-overlay-title="选取屏幕颜色 Pick color " { spawn-sh "hyprpicker | wl-copy"; }
     Mod+Alt+V  hotkey-overlay-title="剪贴板 Clipboard" {spawn-sh "copyq toggle || clipse-gui";}
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
@@ -390,14 +390,4 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
     // moving the mouse or pressing any other key.
     Mod+Shift+P  hotkey-overlay-title="关闭显示器 Turn off monitors" { power-off-monitors; }
 
-
-// 截取全屏并使用 Noctalia 发送通知
-    Print {
-        spawn "sh" "-c" "niri msg action screenshot && qs -c noctalia-shell ipc call toast send '{\"title\": \"截图成功\", \"body\": \"已保存至图片目录\", \"icon\": \"camera-photo\"}'";
-    }
-
-    // 交互式选择区域截图
-    Alt+Print {
-        spawn "sh" "-c" "niri msg action screenshot-screen && qs -c noctalia-shell ipc call toast send '{\"title\": \"区域截图\", \"type\": \"notice\"}'";
-    }
 }

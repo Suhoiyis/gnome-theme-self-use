@@ -143,21 +143,9 @@ input {
     focus-follows-mouse max-scroll-amount="30%"
 }
 
-// 确保正常的壁纸层是清晰的（不放在 backdrop）
-layer-rule {
-    match namespace="^noctalia-wallpaper*"
-    // 删掉这里的 place-within-backdrop，或者显式设为 false
-    place-within-backdrop false
-}
-
-// 确保只有概览模式的模糊层放在 backdrop（即只在缩略图模式显示）
-layer-rule {
-    match namespace="^noctalia-overview*"
-    place-within-backdrop true
-}
 layout {
 
-//background-color "transparent"
+background-color "transparent"
 
     // Set gaps around windows in logical pixels.
     // 窗口和窗口之间的间距
@@ -324,28 +312,14 @@ layout {
 // 自动启动设置
 // 询问管理员权限功能（身份验证）
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
-// 桌面壁纸的守护进程
-//spawn-at-startup "swww-daemon"
-// 总览界面背景壁纸的守护进程
-//spawn-sh-at-startup "swww-daemon -n overview"
-// 启动niri时ss随机更换一张壁纸
-//spawn-at-startup "waypaper" "--random"
-// 有聚焦窗口时桌面自动模糊的脚本
-//spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
 // 屏幕分享、录屏相关的环境设置
 spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & /usr/lib/xdg-desktop-portal-gnome"
-// 通知程序
-//spawn-at-startup "mako"
-// 任务栏
-//spawn-at-startup "waybar"
 // 输入法
 spawn-at-startup "fcitx5"
 // 剪贴板守护进程
 spawn-sh-at-startup "clipse --listen"
 // 闲置时自动熄屏锁屏休眠的脚本
-spawn-at-startup "~/.config/niri/scripts/swayidle.sh"
-// 大写锁定键的osd显示
-//spawn-at-startup "swayosd-server"
+//spawn-at-startup "~/.config/niri/scripts/swayidle.sh"
 // alt+tab切换器（这是一个第三方，无缩略图显示的切换器）
 spawn-at-startup "niriswitcher"
 
@@ -355,22 +329,22 @@ spawn-at-startup "/home/yua/.config/niri/scripts/init-theme.sh"
 //声音
 spawn-at-startup "/home/yua/.config/niri/scripts/fix-audio-levels.sh"
 
-//网络面板
-spawn-at-startup "nm-applet"
-
-//蓝牙,只在niri里用
-//spawn-at-startup "blueman-applet"
-
-//大写
-spawn-at-startup "swayosd-server"
+// Noctalia 启动时禁用 mako（仅当前会话）
+spawn-sh-at-startup "systemctl --user stop mako.service 2>/dev/null || true; systemctl --user mask --runtime mako.service 2>/dev/null || true; killall mako 2>/dev/null || true"
 
 spawn-at-startup "qs" "-c" "noctalia-shell"
+
+//壁纸
+spawn-at-startup "/home/yua/AppImages/linuxwallpaperenginegui.appimage" "--minimized"
+// 使用完整的绝对路径，并加入循环重启机制
+// 修复核心：添加 -n 参数，并保留 -d 以应对 Electron 应用的文件替换逻辑
+spawn-sh-at-startup "while true; do echo $HOME/.config/linux-wallpaperengine-gui/config.json | entr -ndp /home/yua/.config/niri/scripts/sync_colors.sh; sleep 1; done"
+// 监听 Linux Wallpaper Engine 的配置变化并自动执行同步
+spawn-at-startup "sh" "-c" "echo $HOME/.config/linux-wallpaperengine-gui/config.json | entr -n sh $HOME/.config/niri/scripts/sync_colors.sh"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
-// 修改这一行，将标准输出和错误都存入 log
-spawn-at-startup "sh" "-c" "/home/yua/.config/niri/scripts/sync_starship.sh > /tmp/starship_sync.log 2>&1"
 
 // 取消启动niri时自动开启快捷键教程
 hotkey-overlay {
