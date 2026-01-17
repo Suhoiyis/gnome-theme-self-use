@@ -16,18 +16,9 @@ binds {
     // 显示快捷键教程
     Mod+Shift+Slash hotkey-overlay-title="快捷键教程 Keybind tutorial" { show-hotkey-overlay; }
 
-    // 我添加的快捷键
     // alt+tab切换窗口
     Alt+Tab repeat=false {spawn "niriswitcherctl" "show" "--window";}
-    Mod+Alt+W hotkey-overlay-title="切换壁纸 Change wallpaper" {spawn "waypaper";}
-    Mod+F10 hotkey-overlay-title="随机切换壁纸 Random wallpaper" {spawn "waypaper" "--random";}
     Mod+F1 hotkey-overlay-title="开关输入法 Toggle fcitx" {spawn-sh "pkill fcitx5 || fcitx5 ";}
-    Mod+F2 hotkey-overlay-title="顶部任务栏 Top bar"  {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c $HOME/.config/waybar/config.jsonc -s $HOME/.config/waybar/style.css ";}
-    Mod+F3  hotkey-overlay-title="底部任务栏 Bottom bar" {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c $HOME/.config/waybar-niri-Win11Like/config.jsonc -s $HOME/.config/waybar-niri-Win11Like/style.css ";}
-    // 这一行是用waybar自己支持的信号功能隐藏waybar，但进程没有退出，资源占用依旧有
-    //Mod+F4 hotkey-overlay-title="隐藏waybar" {spawn-sh "killall -SIGUSR1 waybar";}
-    // 这一行是关闭waybar进程，释放资源占用。在意资源占用的时候使用。
-    Mod+F4 hotkey-overlay-title="开关任务栏 toggle bar" {spawn-sh "pkill waybar && pkill cava || waybar ";}
     // gnome的文本编辑器
     Mod+M hotkey-overlay-title="记事本 Notebook" {spawn "gnome-text-editor";}
     Mod+B hotkey-overlay-title="浏览器 Browser" { spawn "firefox"; }
@@ -41,28 +32,27 @@ binds {
     // 另一个打开nautilus的快捷键，主要是为了在同时安装thunar和nautilus的情况下打开naultilus
     Mod+Alt+E hotkey-overlay-title=null {spawn-sh "env GSK_RENDERER=gl GTK_IM_MODULE=fcitx  nautilus";}
 
-// 将 spawn "fuzzel" 修改为下方的 IPC 调用命令
+    // 将 spawn "fuzzel" 修改为下方的 IPC 调用命令
 
 
-// noctalia launcher
-Mod+Z hotkey-overlay-title="程序菜单 Launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+    // noctalia launcher
+    Mod+Z hotkey-overlay-title="程序菜单 Launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
 
-// noctalia setting
-Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "settings" "toggle"; }
+    // noctalia setting
+    Mod+Shift+U hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "settings" "toggle"; }
 
-//noctalia control center
-//Mod+Shift+Alt+Z hotkey-overlay-title="控制中心 Control Center" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "control-center" "toggle"; }
+    // noctalia control center
+    Mod+Shift+I hotkey-overlay-title="控制中心 Control Center" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "controlCenter" "toggle"; }
 
 
     // 锁屏
 
-    //Mod+Alt+L hotkey-overlay-title="锁屏 Lock screen" { spawn "swaylock"; }
+    Mod+Alt+L hotkey-overlay-title="锁屏 Lock screen" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "lockAndSuspend"; }
     Mod+P hotkey-overlay-title="选取屏幕颜色 Pick color " { spawn-sh "hyprpicker | wl-copy"; }
-    Mod+Alt+V  hotkey-overlay-title="剪贴板 Clipboard" {spawn-sh "copyq toggle || clipse-gui";}
+    Mod+Alt+V  hotkey-overlay-title="剪贴板 Clipboard" {spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "clipboard";}
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
     // For example, this is a standard bind to toggle the screen reader (orca).
-    Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
     //Super+Alt+V {spawn "copyq" "toggle";}
     // Example volume keys mappings for PipeWire & WirePlumber.
     // The allow-when-locked=true property makes them work even when the session is locked.
@@ -84,8 +74,8 @@ Mod+Shift+Z hotkey-overlay-title="设置 Settings" { spawn "qs" "-c" "noctalia-s
     // You can also move the mouse into the top-left hot corner,
     // or do a four-finger swipe up on a touchpad.
     // 切换overview总览
-    Mod+O hotkey-overlay-title="切换总览界面 toggle overview" repeat=false { toggle-overview; }
-    Mod+G repeat=false { toggle-overview; }
+    Mod+G hotkey-overlay-title="切换总览界面 toggle overview" repeat=false { toggle-overview; }
+    Mod+O repeat=false { toggle-overview; }
     // 关闭聚焦窗口
     Mod+Q hotkey-overlay-title="关闭聚焦窗口 Close focus window" repeat=false { close-window; }
     // mod+鼠标中键 关闭窗口
