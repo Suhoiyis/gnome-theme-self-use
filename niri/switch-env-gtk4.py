@@ -23,9 +23,8 @@ class EnvironmentCard(Gtk.Box):
         self.add_css_class('card')
         self.add_css_class('environment-card')
 
-        # 图标
-        icon_widget = Gtk.Label(label=icon)
-        icon_widget.add_css_class('environment-icon')
+        # 图标：若传入路径且存在文件，则用图片，否则用 Emoji 文本
+        icon_widget = self._build_icon_widget(icon)
         self.append(icon_widget)
 
         # 标题
@@ -42,36 +41,57 @@ class EnvironmentCard(Gtk.Box):
         desc_label.set_justify(Gtk.Justification.CENTER)
         self.append(desc_label)
 
+    def _build_icon_widget(self, icon):
+        try:
+            icon_path = Path(icon)
+            if icon_path.exists():
+                pic = Gtk.Picture.new_for_filename(str(icon_path))
+                pic.set_size_request(64, 64)
+                pic.set_content_fit(Gtk.ContentFit.CONTAIN)
+                pic.set_halign(Gtk.Align.CENTER)
+                pic.set_valign(Gtk.Align.CENTER)
+                pic.add_css_class('environment-icon')
+                return pic
+        except Exception:
+            pass
+
+        label = Gtk.Label(label=str(icon))
+        label.set_size_request(64, 64)
+        label.set_halign(Gtk.Align.CENTER)
+        label.set_valign(Gtk.Align.CENTER)
+        label.add_css_class('environment-icon')
+        return label
+
 class NiriSwitcher(Adw.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.config_base = Path.home() / ".config"
-        self.niri_config = self.config_base / "niri"
+        self.config_base = Path.home() / "gnome-theme-self-use" / "niri"
+        self.niri_config = Path.home() / ".config" / "niri"
 
         # 环境配置
         self.environments = [
             {
                 "name": "Linux-wallpaper + Waybar",
-                "icon": "🖼️",
+                "icon": str(Path.home() / ".config/niri/__pycache__/linuxwallpaperenginegui.png"),
                 "desc": "使用 Linux wallpaper engine\n管理动态壁纸，Waybar 状态栏",
                 "path": "niri_linux-wallpaper+waybar"
             },
             {
                 "name": "Noctalia Shell",
-                "icon": "🎨",
+                "icon": str(Path.home() / ".config/niri/__pycache__/noctalia.svg"),
                 "desc": "完整的 Noctalia 桌面环境\n统一管理壁纸、状态栏和小部件",
                 "path": "niri_noctalia"
             },
             {
                 "name": "Noctalia + Wallpaper",
-                "icon": "🎭",
+                "icon": str(Path.home() / ".config/niri/__pycache__/nalw.png"),
                 "desc": "Noctalia 管理状态栏\nLinux wallpaper engine 管理动态壁纸",
                 "path": "niri_noctalia+wallpaper"
             },
             {
                 "name": "Swww + Waybar",
-                "icon": "🌈",
+                "icon": str(Path.home() / ".config/niri/__pycache__/waws.png"),
                 "desc": "使用 Swww 切换壁纸\nWaybar 作为状态栏",
                 "path": "niri_swww+waybar"
             }
@@ -118,6 +138,8 @@ class NiriSwitcher(Adw.ApplicationWindow):
         grid = Gtk.Grid()
         grid.set_row_spacing(16)
         grid.set_column_spacing(16)
+        grid.set_row_homogeneous(True)
+        grid.set_column_homogeneous(True)
         grid.set_halign(Gtk.Align.CENTER)
 
         self.buttons = []
@@ -178,6 +200,10 @@ class NiriSwitcher(Adw.ApplicationWindow):
 
         .environment-icon {
             font-size: 48px;
+            min-width: 64px;
+            min-height: 64px;
+            max-width: 64px;
+            max-height: 64px;
         }
 
         button:hover .environment-card {
@@ -257,22 +283,17 @@ class NiriSwitcher(Adw.ApplicationWindow):
             for old in backups[5:]:
                 shutil.rmtree(old, ignore_errors=True)
 
-            # 复制新配置
+            # 先清理旧配置（保留备份、Python 应用及虚拟环境）
+            self.clean_current_config()
+
+            # 再复制新配置
             for item in env_path.glob("*"):
                 dest = self.niri_config / item.name
-                if dest.exists():
-                    if dest.is_dir():
-                        shutil.rmtree(dest)
-                    else:
-                        dest.unlink()
 
                 if item.is_dir():
                     shutil.copytree(item, dest)
                 else:
                     shutil.copy2(item, dest)
-
-            # 清理旧配置（保留备份、Python 应用及虚拟环境），再复制新配置
-            self.clean_current_config()
 
             # 根据环境修改 Noctalia 壁纸设置
             self.configure_noctalia_wallpaper()
