@@ -271,11 +271,44 @@ class NiriSwitcher(Adw.ApplicationWindow):
                 else:
                     shutil.copy2(item, dest)
 
+            # 根据环境修改 Noctalia 壁纸设置
+            self.configure_noctalia_wallpaper()
+
             # 显示成功并注销
             self.show_success()
 
         except Exception as e:
             self.show_error(f"切换失败:\n{str(e)}")
+
+    def configure_noctalia_wallpaper(self):
+        """根据环境配置 Noctalia 的壁纸设置"""
+        import json
+        
+        noctalia_config = Path.home() / ".config" / "noctalia" / "settings.json"
+        
+        if not noctalia_config.exists():
+            return  # Noctalia 未安装，忽略
+        
+        try:
+            with open(noctalia_config, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            # 根据环境确定是否启用 Noctalia 壁纸管理
+            env_name = self.selected_env["path"]
+            
+            # noctalia 环境启用壁纸，其他环境禁用
+            if env_name == "niri_noctalia":
+                data["wallpaper"]["enabled"] = True
+            else:
+                data["wallpaper"]["enabled"] = False
+            
+            # 写回配置
+            with open(noctalia_config, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+        
+        except Exception as e:
+            # 配置修改失败不阻止切换，只记录
+            print(f"警告: Noctalia 壁纸配置修改失败: {e}")
 
     def show_success(self):
         """显示成功消息，带倒计时"""

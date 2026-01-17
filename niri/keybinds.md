@@ -1,0 +1,188 @@
+
+Keybinds
+
+Take full control of Noctalia with keyboard shortcuts and IPC commands. This page covers how to start the shell and all available commands you can bind to your favorite keys.
+
+Installation-specific commands
+
+    NixOS Flake users: Use noctalia-shell directly instead of qs -c noctalia-shell
+    PikaOS: Use qs instead of qs -c noctalia-shell
+    Manual installation users: If you have Noctalia in ~/.config/quickshell/, you can use qs ipc call... directly
+
+Available Commands
+
+Noctalia provides extensive IPC (Inter-Process Communication) support, allowing you to control every aspect of the shell through commands. These are perfect for binding to keyboard shortcuts in your window manager or desktop environment.
+Core Functions
+Function	Command	Description
+Application Launcher	qs -c noctalia-shell ipc call launcher toggle	Open/close the application launcher
+Control Center	qs -c noctalia-shell ipc call controlCenter toggle	Toggle the control center visibility
+Settings	qs -c noctalia-shell ipc call settings toggle	Open/close the settings window
+Quick Access
+Function	Command	Description
+Clipboard History	qs -c noctalia-shell ipc call launcher clipboard	Access your clipboard history
+Emoji	qs -c noctalia-shell ipc call launcher emoji	Quick emoji selector access
+Calendar	qs -c noctalia-shell ipc call calendar toggle	Open/close the Calendar window
+Session Menu	qs -c noctalia-shell ipc call sessionMenu toggle	Logout, reboot, shutdown…
+Lock & Suspend	qs -c noctalia-shell ipc call sessionMenu lockAndSuspend	Lock the screen and suspend the system
+System Controls
+Audio Management
+Function	Command	Description
+Volume Up	qs -c noctalia-shell ipc call volume increase	Increase system volume
+Volume Down	qs -c noctalia-shell ipc call volume decrease	Decrease system volume
+Mute Output	qs -c noctalia-shell ipc call volume muteOutput	Toggle output audio mute
+Input Up	qs -c noctalia-shell ipc call volume increaseInput	Increase input volume
+Input Down	qs -c noctalia-shell ipc call volume decreaseInput	Decrease input volume
+Mute Input	qs -c noctalia-shell ipc call volume muteInput	Toggle input audio mute
+Toggle Panel	qs -c noctalia-shell ipc call volume togglePanel	Toggle the audio panel
+Open Panel	qs -c noctalia-shell ipc call volume openPanel	Open the audio panel
+Close Panel	qs -c noctalia-shell ipc call volume closePanel	Close the audio panel
+Media Controls
+Function	Command	Description
+Play/Pause	qs -c noctalia-shell ipc call media playPause	Toggle play/pause for media
+Play	qs -c noctalia-shell ipc call media play	Play media
+Pause	qs -c noctalia-shell ipc call media pause	Pause media
+Next	qs -c noctalia-shell ipc call media next	Go to the next media track
+Previous	qs -c noctalia-shell ipc call media previous	Go to the previous media track
+Seek Relative	qs -c noctalia-shell ipc call media seekRelative $offset	Seek media by a relative offset in seconds
+Seek By Ratio	qs -c noctalia-shell ipc call media seekByRatio $position	Seek media to a specific position from 0.0 to 1.0
+Network & Connectivity
+Function	Command	Description
+WiFi Toggle	qs -c noctalia-shell ipc call wifi toggle	Toggle WiFi on/off
+WiFi Enable	qs -c noctalia-shell ipc call wifi enable	Enable WiFi
+WiFi Disable	qs -c noctalia-shell ipc call wifi disable	Disable WiFi
+WiFi Panel	qs -c noctalia-shell ipc call wifi togglePanel	Toggle the WiFi panel
+Bluetooth Toggle	qs -c noctalia-shell ipc call bluetooth toggle	Toggle Bluetooth on/off
+Bluetooth Enable	qs -c noctalia-shell ipc call bluetooth enable	Enable Bluetooth
+Bluetooth Disable	qs -c noctalia-shell ipc call bluetooth disable	Disable Bluetooth
+Bluetooth Panel	qs -c noctalia-shell ipc call bluetooth togglePanel	Toggle the Bluetooth panel
+Display & Brightness
+Function	Command	Description
+Brightness Up	qs -c noctalia-shell ipc call brightness increase	Increase screen brightness
+Brightness Down	qs -c noctalia-shell ipc call brightness decrease	Decrease screen brightness
+NightLight Toggle	qs -c noctalia-shell ipc call nightLight toggle	Toggle night light (force activation)/off
+Screen Recorder
+
+Deprecated
+
+The screenRecorder IPC commands have been moved to the Screen Recorder plugin. The old IPC syntax is no longer part of the core shell. See the plugin README for the current IPC commands.
+Battery Management
+Function	Command	Description
+Cycle charging modes	qs -c noctalia-shell ipc call batteryManager cycle	Switch between charging modes
+Full capacity	qs -c noctalia-shell ipc call batteryManager set full	Set Full capacity mode
+Balanced	qs -c noctalia-shell ipc call batteryManager set balanced	Set Balanced mode
+Lifespan	qs -c noctalia-shell ipc call batteryManager set lifespan	Set Lifespan mode
+Battery Panel	qs -c noctalia-shell ipc call battery togglePanel	Toggle the Battery panel
+Power Profile Management
+Function	Command	Description
+Cycle power profiles	qs -c noctalia-shell ipc call powerProfile cycle	Switch between power profiles
+Power Saver	qs -c noctalia-shell ipc call powerProfile set powersaver	Set Power Saver mode
+Balanced	qs -c noctalia-shell ipc call powerProfile set balanced	Set Balanced mode
+Performance	qs -c noctalia-shell ipc call powerProfile set performance	Set Performance mode
+Security & Privacy
+Function	Command	Description
+Lock Screen	qs -c noctalia-shell ipc call lockScreen lock	Lock your screen
+Idle Inhibitor	qs -c noctalia-shell ipc call idleInhibitor toggle	Prevent system from going idle
+Enable Idle Inhibitor	qs -c noctalia-shell ipc call idleInhibitor enable	Disable idle inhibitor
+Disable Idle Inhibitor	qs -c noctalia-shell ipc call idleInhibitor disable	Enable idle inhibitor
+Notifications
+Function	Command	Description
+Notification History	qs -c noctalia-shell ipc call notifications toggleHistory	View past notifications
+Get Notification History	qs -c noctalia-shell ipc call notifications getHistory	Get the notification history as a JSON object
+Toggle Do Not Disturb	qs -c noctalia-shell ipc call notifications toggleDND	Toggle notification silence mode
+Enable Do Not Disturb	qs -c noctalia-shell ipc call notifications enableDND	Enable notification silence mode
+Disable Do Not Disturb	qs -c noctalia-shell ipc call notifications disableDND	Disable notification silence mode
+Clear Notification History	qs -c noctalia-shell ipc call notifications clear	Clear notification history
+Remove Oldest	qs -c noctalia-shell ipc call notifications removeOldestHistory	Remove oldest notification from history
+Remove Notification	qs -c noctalia-shell ipc call notifications removeFromHistory $id	Remove notification with given ID from history
+Dismiss Oldest	qs -c noctalia-shell ipc call notifications dismissOldest	Dismiss the oldest active notification
+Dismiss All	qs -c noctalia-shell ipc call notifications dismissAll	Dismiss all active notifications
+Toast & OSD
+Toast Notifications
+Function	Command	Description
+Send Toast	qs -c noctalia-shell ipc call toast send '$json'	Display a toast notification
+
+The toast send command accepts a JSON object with the following fields:
+Field	Type	Required	Description
+title	string	Yes	Toast title
+body	string	No	Toast body/description
+icon	string	No	Icon name (only for notice type)
+type	string	No	notice (default), warning, or error
+duration	number	No	Duration in ms (defaults: notice=3000, warning=4000, error=6000)
+
+Examples:
+Terminal window
+
+# Simple notice
+qs -c noctalia-shell ipc call toast send '{"title": "Recording", "body": "Started (AV1 HDR)", "icon": "media-record"}'
+
+# Warning toast
+qs -c noctalia-shell ipc call toast send '{"title": "Low battery", "type": "warning"}'
+
+# Error with custom duration
+qs -c noctalia-shell ipc call toast send '{"title": "Connection failed", "body": "Check your network", "type": "error", "duration": 10000}'
+
+On-Screen Display (OSD)
+Function	Command	Description
+Show Text	qs -c noctalia-shell ipc call osd showText $text	Display text on OSD
+Show Text with Icon	qs -c noctalia-shell ipc call osd showTextWithIcon $text $icon	Display text with an icon on OSD
+Appearance
+Visibility
+Function	Command	Description
+Toggle Bar Visibility	qs -c noctalia-shell ipc call bar toggle	Switch between invisible and visible
+Show Bar	qs -c noctalia-shell ipc call bar show	Sets the bar to be visible
+Hide Bar	qs -c noctalia-shell ipc call bar hide	Sets the bar to be invisible
+Toggle Dock Visibility	qs -c noctalia-shell ipc call dock toggle	Toggle dock visibility
+Show Desktop Widgets	qs -c noctalia-shell ipc call desktopWidgets enable	Enable the desktop widgets
+Hide Desktop Widgets	qs -c noctalia-shell ipc call desktopWidgets disable	Disable the desktop widgets
+Toggle Desktop Widgets	qs -c noctalia-shell ipc call desktopWidgets toggle	Switch between enable and disable
+Edit Desktop Widgets	qs -c noctalia-shell ipc call desktopWidgets edit	Toggle desktop widgets editing mode
+Theme Controls
+Function	Command	Description
+Toggle Dark Mode	qs -c noctalia-shell ipc call darkMode toggle	Switch between light/dark themes
+Set Dark Mode	qs -c noctalia-shell ipc call darkMode setDark	Force dark theme
+Set Light Mode	qs -c noctalia-shell ipc call darkMode setLight	Force light theme
+Set Color Scheme	qs -c noctalia-shell ipc call colorScheme set <theme>	Set a new color scheme by name
+Wallpaper Management
+Function	Command	Description
+Toggle Selector	qs -c noctalia-shell ipc call wallpaper toggle	Toggle the wallpaper selector
+Set Wallpaper	qs -c noctalia-shell ipc call wallpaper set $path $monitor	Set specific wallpaper on a monitor
+Random Wallpaper	qs -c noctalia-shell ipc call wallpaper random	Apply a random wallpaper
+Toggle Automation	qs -c noctalia-shell ipc call wallpaper toggleAutomation	Toggle wallpaper automation
+Enable Automation	qs -c noctalia-shell ipc call wallpaper enableAutomation	Enable wallpaper automation
+Disable Automation	qs -c noctalia-shell ipc call wallpaper disableAutomation	Disable wallpaper automation
+
+Wallpaper variables
+
+    $path: Full path to your wallpaper image file
+    $monitor: Monitor identifier
+
+To list available monitors
+Terminal window
+
+# Hyprland
+hyprctl monitors
+# Niri
+niri msg -j outputs | jq 'keys'
+
+Misc
+Function	Command	Description
+Output settings state	qs -c noctalia-shell ipc call state all	Output the current settings state
+Set location	qs -c noctalia-shell ipc call location set $name	Set the current geographic location
+Get location	qs -c noctalia-shell ipc call location get	Get the current geographic location
+Example Configurations
+Niri Configuration
+
+Hyprland Configuration
+
+Pro Tips
+
+Custom scripts
+
+You can combine multiple IPC calls in shell scripts for complex workflows:
+
+#!/bin/bash
+# Toggle dark mode and set matching wallpaper
+qs -c noctalia-shell ipc call darkMode toggle
+sleep 0.5
+qs -c noctalia-shell ipc call wallpaper random
+
