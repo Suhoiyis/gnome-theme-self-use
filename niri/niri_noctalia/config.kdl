@@ -330,8 +330,8 @@ spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLA
 spawn-at-startup "fcitx5"
 // 剪贴板守护进程
 spawn-sh-at-startup "clipse --listen"
-// 闲置时自动熄屏锁屏休眠的脚本
-//spawn-at-startup "~/.config/niri/scripts/swayidle.sh"
+// 闲置时自动熄屏锁屏休眠的脚本（noctalia版本）
+spawn-at-startup "~/.config/niri/scripts/swayidle-noctalia.sh"
 // alt+tab切换器（这是一个第三方，无缩略图显示的切换器）
 spawn-at-startup "niriswitcher"
 
