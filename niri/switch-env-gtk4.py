@@ -271,6 +271,9 @@ class NiriSwitcher(Adw.ApplicationWindow):
                 else:
                     shutil.copy2(item, dest)
 
+            # 清理旧配置（保留备份、Python 应用及虚拟环境），再复制新配置
+            self.clean_current_config()
+
             # 根据环境修改 Noctalia 壁纸设置
             self.configure_noctalia_wallpaper()
 
@@ -280,32 +283,54 @@ class NiriSwitcher(Adw.ApplicationWindow):
         except Exception as e:
             self.show_error(f"切换失败:\n{str(e)}")
 
+    def clean_current_config(self):
+        """删除现有 niri 配置（kdl 和 scripts），保留必要文件/目录"""
+        keep_files = {"switch-env-gtk4.py"}
+        keep_prefixes = (".backup_", ".venv", "venv")  # 备份与可能的 Python 虚拟环境
+        keep_dirs = {"__pycache__"}
+
+        for item in self.niri_config.iterdir():
+            name = item.name
+
+            # 保留备份、虚拟环境、应用本身
+            if name.startswith(keep_prefixes) or name in keep_files or name in keep_dirs:
+                continue
+
+            # 删除其余 kdl、scripts 等，确保不会污染环境
+            if item.is_dir():
+                shutil.rmtree(item, ignore_errors=True)
+            else:
+                try:
+                    item.unlink()
+                except FileNotFoundError:
+                    pass
+
     def configure_noctalia_wallpaper(self):
         """根据环境配置 Noctalia 的壁纸设置"""
         import json
-        
+
         noctalia_config = Path.home() / ".config" / "noctalia" / "settings.json"
-        
+
         if not noctalia_config.exists():
             return  # Noctalia 未安装，忽略
-        
+
         try:
             with open(noctalia_config, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            
+
             # 根据环境确定是否启用 Noctalia 壁纸管理
             env_name = self.selected_env["path"]
-            
+
             # noctalia 环境启用壁纸，其他环境禁用
             if env_name == "niri_noctalia":
                 data["wallpaper"]["enabled"] = True
             else:
                 data["wallpaper"]["enabled"] = False
-            
+
             # 写回配置
             with open(noctalia_config, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
-        
+
         except Exception as e:
             # 配置修改失败不阻止切换，只记录
             print(f"警告: Noctalia 壁纸配置修改失败: {e}")
@@ -321,7 +346,7 @@ class NiriSwitcher(Adw.ApplicationWindow):
         self.success_dialog = dialog
         self.update_countdown_message()
 
-        dialog.add_response("ok", "立即注销")
+        dialog.add_response("ok", "立即重启")
         dialog.set_default_response("ok")
         dialog.connect('response', lambda d, r: self.logout())
 
@@ -333,7 +358,7 @@ class NiriSwitcher(Adw.ApplicationWindow):
     def update_countdown_message(self):
         """更新倒计时消息"""
         if hasattr(self, 'success_dialog'):
-            self.success_dialog.set_body(f"环境切换成功!\n\n将在 {self.countdown} 秒后自动注销...")
+            self.success_dialog.set_body(f"环境切换成功!\n\n将在 {self.countdown} 秒后自动重启...")
 
     def update_countdown(self):
         """每秒更新倒计时"""
@@ -355,46 +380,29 @@ class NiriSwitcher(Adw.ApplicationWindow):
         dialog.present()
 
     def logout(self):
-        """注销：优先终止当前 session，必要时再终止整用户"""
+        """改为重启：更彻底且避免 GDM 登录循环问题"""
         try:
-            import os
             import time
+            # 尝试优雅退出 Niri，避免屏幕闪烁
+            try:
+                subprocess.run(["niri", "msg", "quit"], timeout=2)
+            except Exception:
+                subprocess.run(["pkill", "-x", "niri"], timeout=2)
+            time.sleep(0.5)
 
-            user = os.getenv("USER")
-            session_id = os.getenv("XDG_SESSION_ID")
-
-            # 如果环境变量没有 session_id，则从 loginctl 查找当前用户的 session
-            if not session_id:
+            # 触发系统重启（优先 loginctl，其次 systemctl，最后 shutdown）
+            for cmd in (["loginctl", "reboot"], ["systemctl", "reboot"], ["shutdown", "-r", "now"]):
                 try:
-                    output = subprocess.check_output(["loginctl", "list-sessions", "--no-legend"]).decode()
-                    for line in output.strip().splitlines():
-                        parts = line.split()
-                        if len(parts) >= 3 and parts[2] == user:
-                            session_id = parts[0]
-                            break
+                    subprocess.run(cmd, check=True)
+                    break
                 except Exception:
-                    session_id = None
-
-            if session_id:
-                # 先只杀当前 session，避免影响登录管理器
-                subprocess.run(["loginctl", "kill-session", "-s", "SIGTERM", session_id], timeout=2)
-                time.sleep(0.8)
-                subprocess.run(["loginctl", "kill-session", "-s", "SIGKILL", session_id], timeout=2)
-                time.sleep(0.5)
-                subprocess.run(["loginctl", "terminate-session", session_id], timeout=2)
-            else:
-                # 找不到 session 时回退到 kill-user/terminate-user
-                subprocess.run(["loginctl", "kill-user", "-s", "SIGTERM", user], timeout=2)
-                time.sleep(0.8)
-                subprocess.run(["loginctl", "kill-user", "-s", "SIGKILL", user], timeout=2)
-                time.sleep(0.5)
-                subprocess.run(["loginctl", "terminate-user", user], timeout=2)
+                    continue
 
             return False
         except subprocess.TimeoutExpired:
             os._exit(1)
         except Exception as e:
-            print(f"Logout error: {e}")
+            print(f"Reboot error: {e}")
             os._exit(1)
 
 class NiriSwitcherApp(Adw.Application):
