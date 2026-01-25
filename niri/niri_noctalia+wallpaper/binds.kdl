@@ -362,6 +362,20 @@ binds {
     //Mod+Shift+S { spawn "~/.config/niri/scripts/satty-screenshot.sh";}
     Mod+Shift+S  hotkey-overlay-title="截图后按下此键进行编辑 Edit the image after screenshot" { spawn-sh "wl-paste | satty -f -";}
 
+Ctrl+Shift+1 hotkey-overlay-title="截图 OCR（pot）" {
+    // 1. 确保目录存在 (防止第一次报错)
+    // 2. 截图覆盖到 Pot 专用的缓存文件
+    // 3. 发送请求，端口是你截图里的 60828，关键参数 screenshot=false
+    spawn "bash" "-c" "mkdir -p ~/.cache/com.pot-app.desktop/ && grim -g \"$(slurp)\" ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && curl \"http://127.0.0.1:60828/ocr_recognize?screenshot=false\""
+}
+
+Ctrl+Shift+2 hotkey-overlay-title="截图 翻译（pot）" {
+    // 1. 确保目录存在 (防止第一次报错)
+    // 2. 截图覆盖到 Pot 专用的缓存文件
+    // 3. 发送请求，端口是你截图里的 60828，关键参数 screenshot=false
+    spawn "bash" "-c" "mkdir -p ~/.cache/com.pot-app.desktop/ && grim -g \"$(slurp)\" ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && curl \"http://127.0.0.1:60828/ocr_translate?screenshot=false\""
+}
+
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here
     // so they may, for example, forward the key presses as-is to a remote machine.
